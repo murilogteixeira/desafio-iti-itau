@@ -11,7 +11,6 @@ import UIKit
 class TableViewController: UITableViewController {
     
     var dadosTableView = [String:Any]()
-    var comando = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,29 +24,17 @@ class TableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        tratarDadosTableView()
-        
-        print(dadosTableView)
+        super.viewWillAppear(animated)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-    }
-    
-    func tratarDadosTableView() -> Any? {
-        if let comando = dadosTableView["comando"] as? String {
-            self.comando = comando
-            print(comando)
-        }
-        return nil
+        super.viewDidAppear(animated)
     }
 
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if comando == "extrato" {
-            return 70
-        }
-        return 0
+        return 70
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -61,17 +48,12 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        if comando == "extrato" {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ExtratoTableViewCell
-            let dados = dadosTableView["dados"] as! [[String:Any]]
-            cell.descricaoLabel.text = (dados[indexPath.row]["description"] as! String)
-            cell.dataLabel.text = (dados[indexPath.row]["date"] as! String)
-            cell.valorLabel.text = String(dados[indexPath.row]["value"] as! Double)
-            return cell
-        }
-
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ExtratoTableViewCell
+        let dados = dadosTableView["dados"] as! [[String:Any]]
+        cell.descricaoLabel.text = (dados[indexPath.row]["description"] as! String)
+        cell.dataLabel.text = (dados[indexPath.row]["date"] as! String)
+        cell.valorLabel.text = String(dados[indexPath.row]["value"] as! Double)
+        return cell
     }
 
     /*
