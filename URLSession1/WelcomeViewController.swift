@@ -22,25 +22,27 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
             // Mostra a tela de loading
             View.loadingView(show: true, showLoading: true, view: self.view)
             // Verifica se existe um usuario com o nome inserido
-            self.search(nome: nome, completion: { success in
-                // Desabilita a tela de loading
-                View.loadingView(show: false, view: self.view)
+            let json = ["name":nome]
+            API.search(option: "usuario/search", json: json, completion: { response in
                 // Verifica se o usuario foi encontrado
-                if success {
-                    self.vaiParaApp()
+                if let user = response {
+                    DataApp.atualizarDadosDoUsuario(nome: user["name"] as! String, completion: { success in
+                        // Desabilita a tela de loading
+                        View.loadingView(show: false, view: self.view)
+                        self.vaiParaApp()
+                    })
                 } else {
+                    View.loadingView(show: false, view: self.view)
                     View.showBoolAlert(title: "Usuário \"\(nome)\" não cadastrado! Deseja cadastrar?", message: nil, viewController: self, completion: { success in
                         // Cadastrar um novo usuario caso nao exista
                         if success {
                             View.loadingView(show: true, showLoading: true, view: self.view)
                             let json = ["name":nome]
                             API.post(option: "usuario/new", json: json, completion: { success in
-                                View.loadingView(show: false, view: self.view)
                                 DataApp.atualizarDadosDoUsuario(nome: nome, completion: { atualizado in
-                                    print("Dados atualizados. Nome: \(DataApp.dadosDoUsuario["name"] as! String)")
-                                })
-                                View.showOkAlert(title: "Usuário cadastrado!", message: nil, viewController: self, completion: {
-                                    self.vaiParaApp()
+                                    View.showOkAlert(title: "Usuário cadastrado!", message: nil, viewController: self, completion: {
+                                        self.vaiParaApp()
+                                    })
                                 })
                             })
                         }
@@ -55,26 +57,29 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
             // Mostra a tela de loading
             View.loadingView(show: true, showLoading: true, view: self.view)
             // Verifica se existe um usuario com o nome inserido
-            self.search(nome: nome, completion: { success in
-                // Desabilita a tela de loading
-                View.loadingView(show: false, view: self.view)
+            let json = ["name":nome]
+            API.search(option: "usuario/search", json: json, completion: { response in
                 // Verifica se o nome já existe
-                if success {
+                if let user = response {
+                    // Desabilita a tela de loading
+                    View.loadingView(show: false, view: self.view)
                     View.showBoolAlert(title: "Usuário \"\(nome)\" já cadastrado! Deseja acessar a conta?", message: nil, viewController: self, completion: { success in
                         // Acessa a conta do usuario existente
                         if success {
-                            self.vaiParaApp()
+                            DataApp.atualizarDadosDoUsuario(nome: user["name"] as! String, completion: { atualizado in
+                                self.vaiParaApp()
+                            })
                         }
                     })
                 } else {
+                    // Desabilita a tela de loading
+                    View.loadingView(show: false, view: self.view)
                     // Realizar o cadastro
-                    let json = ["name":nome]
                     API.post(option: "usuario/new", json: json, completion: { success in
                         View.showOkAlert(title: "Usuário cadastrado!", message: nil, viewController: self, completion: {
                             DataApp.atualizarDadosDoUsuario(nome: nome, completion: { atualizado in
-                                print("Dados atualizados. Nome: \(DataApp.dadosDoUsuario["name"] as! String)")
+                                self.vaiParaApp()
                             })
-                            self.vaiParaApp()
                         })
                     })
                 }
@@ -83,20 +88,14 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
     }
     
     // Procura um nome cadastrado
-    func search(nome: String, completion: @escaping (Bool) -> Void) {
-        DataApp.atualizarDadosDoUsuario(nome: nome, completion: { atualizado in
-            if atualizado {
-                print("Dados atualizados. Nome: \(DataApp.dadosDoUsuario["name"] as! String)")
+    func search(nome: String, completion: @escaping (Bool, [String:Any]?) -> Void) {
+        API.get(option: "usuario/search?name=\(nome)") { response in
+            if let user = response as? [[String : Any]], user.count != 0, user[0]["name"] as! String == nome {
+                completion(true, user[0])
+            } else {
+                completion(false, nil)
             }
-            completion(atualizado)
-        })
-//        API.get(option: "usuario/search?name=\(nome)", completion: { response in
-//            if let user = response as? [[String : Any]], user.count != 0, user[0]["name"] as! String == nome {
-//                completion(user[0])
-//            } else {
-//                completion(nil)
-//            }
-//        })
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

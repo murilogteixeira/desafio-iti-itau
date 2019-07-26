@@ -22,6 +22,26 @@ class API {
         task.resume()
     }
     
+    static func search(option: String, json: [String:String?], completion: @escaping ([String:Any]?) -> Void) {
+        let prepareUrl = "\(url)\(option)"
+        let urlApi = URL(string: prepareUrl)!
+        var request = URLRequest(url: urlApi)
+        request.httpMethod = "POST"
+        
+        request.setValue("appliucation/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
+        
+        let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+        let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
+            if let resposta = self.tratarResposta(data: data, response: response, error: error) as? [[String:Any]], resposta.count > 0 {
+                completion(resposta[0])
+            } else {
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+    
     static func post(option: String, json: [String:String?], completion: @escaping (Bool) -> Void) {
         let prepareUrl = "\(url)\(option)"
         let urlApi = URL(string: prepareUrl)!

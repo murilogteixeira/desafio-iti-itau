@@ -29,33 +29,33 @@ class ViewController: UIViewController {
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        View.loadingView(show: true, showLoading: true, view: self.view)
-        DataApp.atualizarDadosDoUsuario(nome: DataApp.dadosDoUsuario["name"] as! String) { success in
-            print(success)
-            View.loadingView(show: false, view: self.view)
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let username = DataApp.dadosDoUsuario["name"] {
-            let user = DataApp.dadosDoUsuario
-            labelNome.text = "Olá \(username)!\nAqui está o resumo da sua conta:"
-            if let saldoConta = user["accountBalance"] as? Double,
-                let saldoPoupanca = user["savingsBalance"] as? Double {
-                labelSaldoConta.text = String("R$\(saldoConta)")
-                labelSaldoPoupanca.text = String("R$\(saldoPoupanca)")
+        DataApp.atualizarDadosDoUsuario(nome: DataApp.dadosDoUsuario["name"] as! String) { success in
+            DispatchQueue.main.async {
+                if let username = DataApp.dadosDoUsuario["name"] {
+                    let user = DataApp.dadosDoUsuario
+                    self.labelNome.text = "Olá \(username)!\nAqui está o resumo da sua conta:"
+                    if let saldoConta = user["accountBalance"] as? Double,
+                        let saldoPoupanca = user["savingsBalance"] as? Double {
+                        self.labelSaldoConta.text = String("R$\(saldoConta)")
+                        self.labelSaldoPoupanca.text = String("R$\(saldoPoupanca)")
+                    }
+                }
             }
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     @IBAction func irParaTransferencia(_ sender: Any) {
+        
     }
     
     @IBAction func irParaExtrato(_ sender: Any) {
-        if let extrato = DataApp.dadosDoUsuario["accountHistoric"] as? [String:Any] {
+        if let extrato = DataApp.dadosDoUsuario["accountHistoric"] as? [[String:Any]] {
             dadosParaTableView = [
                 "comando"   : "extrato",
                 "dados"     : extrato

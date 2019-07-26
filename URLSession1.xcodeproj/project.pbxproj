@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		691112BC22EB78D00031EEE1 /* DataApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691112BB22EB78D00031EEE1 /* DataApp.swift */; };
+		691112BE22EB83EC0031EEE1 /* ExtratoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691112BD22EB83EC0031EEE1 /* ExtratoTableViewCell.swift */; };
 		69794FC322E77EF2002C79DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69794FC222E77EF2002C79DD /* AppDelegate.swift */; };
 		69794FC522E77EF2002C79DD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69794FC422E77EF2002C79DD /* ViewController.swift */; };
 		69794FC822E77EF2002C79DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69794FC622E77EF2002C79DD /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		691112BB22EB78D00031EEE1 /* DataApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataApp.swift; sourceTree = "<group>"; };
+		691112BD22EB83EC0031EEE1 /* ExtratoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtratoTableViewCell.swift; sourceTree = "<group>"; };
 		69794FBF22E77EF2002C79DD /* URLSession1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = URLSession1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69794FC222E77EF2002C79DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69794FC422E77EF2002C79DD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				69794FC922E77EF4002C79DD /* Assets.xcassets */,
 				69794FCB22E77EF4002C79DD /* LaunchScreen.storyboard */,
 				69794FCE22E77EF4002C79DD /* Info.plist */,
+				691112BD22EB83EC0031EEE1 /* ExtratoTableViewCell.swift */,
 			);
 			path = URLSession1;
 			sourceTree = "<group>";
@@ -157,6 +160,7 @@
 				69C74CFC22EAA87B00F42F3F /* TableViewController.swift in Sources */,
 				69794FC322E77EF2002C79DD /* AppDelegate.swift in Sources */,
 				691112BC22EB78D00031EEE1 /* DataApp.swift in Sources */,
+				691112BE22EB83EC0031EEE1 /* ExtratoTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

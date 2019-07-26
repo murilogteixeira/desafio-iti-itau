@@ -10,13 +10,8 @@ import UIKit
 
 class TableViewController: UITableViewController {
     
-    let userDefaults = UserDefaults.standard
-    let dadosUserDefaults = "dadosUserDefaults"
-    let api = API()
-    var contatos = [String]()
-    var nomeUsuario = ""
-    
     var dadosTableView = [String:Any]()
+    var comando = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,34 +25,17 @@ class TableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        View.loadingView(show: true, showLoading: true, view: self.view)
         tratarDadosTableView()
+        
+        print(dadosTableView)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if let user = self.userDefaults.dictionary(forKey: self.dadosUserDefaults) {
-            nomeUsuario = user["name"] as! String
-        }
-        
-        API.get(option: "usuario/list") { users in
-            if let dados = users as? [String:[String]],
-                let nomes = dados["nomes"] {
-                for nome in nomes {
-                    if nome != self.nomeUsuario {
-                        self.contatos.append(nome)
-                    }
-                }
-                DispatchQueue.main.async {
-                    View.loadingView(show: false, view: self.view)
-                    self.tableView.reloadData()
-                }
-            }
-        }
     }
     
     func tratarDadosTableView() -> Any? {
-        if let comando = dadosTableView["dados"] as? String,
-            comando == "dados" {
+        if let comando = dadosTableView["comando"] as? String {
+            self.comando = comando
             print(comando)
         }
         return nil
@@ -65,6 +43,13 @@ class TableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if comando == "extrato" {
+            return 70
+        }
+        return 0
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -72,15 +57,21 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return contatos.count
+        return (dadosTableView["dados"] as! [Any?]).count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 
-        cell.textLabel?.text = contatos[indexPath.row]
+        if comando == "extrato" {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ExtratoTableViewCell
+            let dados = dadosTableView["dados"] as! [[String:Any]]
+            cell.descricaoLabel.text = (dados[indexPath.row]["description"] as! String)
+            cell.dataLabel.text = (dados[indexPath.row]["date"] as! String)
+            cell.valorLabel.text = String(dados[indexPath.row]["value"] as! Double)
+            return cell
+        }
 
-        return cell
+        return UITableViewCell()
     }
 
     /*

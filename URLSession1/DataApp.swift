@@ -12,9 +12,11 @@ class DataApp {
     static var dadosDoUsuario = [String:Any]()
     
     static func atualizarDadosDoUsuario(nome:String, completion: @escaping (Bool) -> Void) {
-        API.get(option: "usuario/search?name=\(nome)") { response in
-            if let data = response as? [[String:Any]] {
-                DataApp.dadosDoUsuario = data[0]
+        let json = ["name":nome]
+        API.search(option: "usuario/search", json: json) { response in
+            if let data = response {
+                DataApp.dadosDoUsuario = data
+                print("Dados atualizados. Nome: \(DataApp.dadosDoUsuario["name"] as! String)")
                 completion(true)
             } else {
                 completion(false)
