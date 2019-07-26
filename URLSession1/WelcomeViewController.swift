@@ -11,9 +11,6 @@ import UIKit
 
 class WelcomeViewController: UIViewController, UITextFieldDelegate {
     
-    let userDefaults = UserDefaults.standard
-    let dadosUserDefaults = "dadosUserDefaults"
-    let api = API()
     var contatos = [[String:Any]]()
     
     override func viewDidLoad() {
@@ -25,11 +22,11 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
             // Mostra a tela de loading
             View.loadingView(show: true, showLoading: true, view: self.view)
             // Verifica se existe um usuario com o nome inserido
-            self.search(name: nome, completion: { user in
+            self.search(nome: nome, completion: { success in
                 // Desabilita a tela de loading
                 View.loadingView(show: false, view: self.view)
                 // Verifica se o usuario foi encontrado
-                if user != nil {
+                if success {
                     self.vaiParaApp()
                 } else {
                     View.showBoolAlert(title: "Usuário \"\(nome)\" não cadastrado! Deseja cadastrar?", message: nil, viewController: self, completion: { success in
@@ -37,9 +34,11 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
                         if success {
                             View.loadingView(show: true, showLoading: true, view: self.view)
                             let json = ["name":nome]
-                            self.api.post(option: "usuario/new", json: json, completion: { success in
+                            API.post(option: "usuario/new", json: json, completion: { success in
                                 View.loadingView(show: false, view: self.view)
-                                self.userDefaults.set(nome, forKey: self.dadosUserDefaults)
+                                DataApp.atualizarDadosDoUsuario(nome: nome, completion: { atualizado in
+                                    print("Dados atualizados. Nome: \(DataApp.dadosDoUsuario["name"] as! String)")
+                                })
                                 View.showOkAlert(title: "Usuário cadastrado!", message: nil, viewController: self, completion: {
                                     self.vaiParaApp()
                                 })
@@ -56,11 +55,11 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
             // Mostra a tela de loading
             View.loadingView(show: true, showLoading: true, view: self.view)
             // Verifica se existe um usuario com o nome inserido
-            self.search(name: nome, completion: { user in
+            self.search(nome: nome, completion: { success in
                 // Desabilita a tela de loading
                 View.loadingView(show: false, view: self.view)
                 // Verifica se o nome já existe
-                if user != nil {
+                if success {
                     View.showBoolAlert(title: "Usuário \"\(nome)\" já cadastrado! Deseja acessar a conta?", message: nil, viewController: self, completion: { success in
                         // Acessa a conta do usuario existente
                         if success {
@@ -70,9 +69,11 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
                 } else {
                     // Realizar o cadastro
                     let json = ["name":nome]
-                    self.api.post(option: "usuario/new", json: json, completion: { success in
+                    API.post(option: "usuario/new", json: json, completion: { success in
                         View.showOkAlert(title: "Usuário cadastrado!", message: nil, viewController: self, completion: {
-                            self.userDefaults.set(nome, forKey: self.dadosUserDefaults)
+                            DataApp.atualizarDadosDoUsuario(nome: nome, completion: { atualizado in
+                                print("Dados atualizados. Nome: \(DataApp.dadosDoUsuario["name"] as! String)")
+                            })
                             self.vaiParaApp()
                         })
                     })
@@ -82,15 +83,20 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
     }
     
     // Procura um nome cadastrado
-    func search(name: String, completion: @escaping ([String:Any]?) -> Void) {
-        self.api.get(option: "usuario/search?name=\(name)", completion: { response in
-            if let user = response as? [[String : Any]], user.count != 0, user[0]["name"] as! String == name {
-                completion(user[0])
-                self.userDefaults.set(user[0], forKey: self.dadosUserDefaults)
-            } else {
-                completion(nil)
+    func search(nome: String, completion: @escaping (Bool) -> Void) {
+        DataApp.atualizarDadosDoUsuario(nome: nome, completion: { atualizado in
+            if atualizado {
+                print("Dados atualizados. Nome: \(DataApp.dadosDoUsuario["name"] as! String)")
             }
+            completion(atualizado)
         })
+//        API.get(option: "usuario/search?name=\(nome)", completion: { response in
+//            if let user = response as? [[String : Any]], user.count != 0, user[0]["name"] as! String == nome {
+//                completion(user[0])
+//            } else {
+//                completion(nil)
+//            }
+//        })
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

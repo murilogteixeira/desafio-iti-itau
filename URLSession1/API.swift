@@ -9,10 +9,10 @@
 import Foundation
 
 class API {
-    let session = URLSession.shared
-    let url = "https://api-murilo.mybluemix.net/"
+    static let session = URLSession.shared
+    static let url = "https://api-murilo.mybluemix.net/"
     
-    func get(option: String, completion: @escaping (Any?) -> Void) {
+    static func get(option: String, completion: @escaping (Any?) -> Void) {
         let prepareUrl = "\(url)\(option)"
         let urlApi = URL(string: prepareUrl)!
         
@@ -22,7 +22,7 @@ class API {
         task.resume()
     }
     
-    func post(option: String, json: [String:String?], completion: @escaping (Bool) -> Void) {
+    static func post(option: String, json: [String:String?], completion: @escaping (Bool) -> Void) {
         let prepareUrl = "\(url)\(option)"
         let urlApi = URL(string: prepareUrl)!
         var request = URLRequest(url: urlApi)
@@ -44,7 +44,7 @@ class API {
         task.resume()
     }
     
-    func delete(option: String, json: [String:String?]) {
+    static func delete(option: String, json: [String:String?]) {
         let prepareUrl = "\(url)\(option)"
         let urlApi = URL(string: prepareUrl)!
         var request = URLRequest(url: urlApi)
@@ -61,7 +61,7 @@ class API {
         task.resume()
     }
     
-    func tratarResposta(data: Data?, response: URLResponse?, error: Error?) -> Any? {
+    static func tratarResposta(data: Data?, response: URLResponse?, error: Error?) -> Any? {
         // verifica se houve erro
         guard error == nil else {
             print("Ocorreu um erro. \(String(describing: error))")

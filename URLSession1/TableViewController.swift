@@ -8,13 +8,15 @@
 
 import UIKit
 
-class ContatosTableViewController: UITableViewController {
+class TableViewController: UITableViewController {
     
     let userDefaults = UserDefaults.standard
     let dadosUserDefaults = "dadosUserDefaults"
     let api = API()
     var contatos = [String]()
     var nomeUsuario = ""
+    
+    var dadosTableView = [String:Any]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,12 @@ class ContatosTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        View.loadingView(show: true, showLoading: true, view: self.view)
+        tratarDadosTableView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -31,7 +39,7 @@ class ContatosTableViewController: UITableViewController {
             nomeUsuario = user["name"] as! String
         }
         
-        api.get(option: "usuario/list") { users in
+        API.get(option: "usuario/list") { users in
             if let dados = users as? [String:[String]],
                 let nomes = dados["nomes"] {
                 for nome in nomes {
@@ -40,11 +48,19 @@ class ContatosTableViewController: UITableViewController {
                     }
                 }
                 DispatchQueue.main.async {
+                    View.loadingView(show: false, view: self.view)
                     self.tableView.reloadData()
                 }
             }
         }
+    }
     
+    func tratarDadosTableView() -> Any? {
+        if let comando = dadosTableView["dados"] as? String,
+            comando == "dados" {
+            print(comando)
+        }
+        return nil
     }
 
     // MARK: - Table view data source
