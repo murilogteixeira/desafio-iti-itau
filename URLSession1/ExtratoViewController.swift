@@ -8,10 +8,13 @@
 
 import UIKit
 
-class TableViewController: UITableViewController {
+class ExtratoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var dadosTableView = [String:Any]()
-
+    var historico = [[String:Any]]()
+    
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,7 +23,7 @@ class TableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
+        alterarExtrato(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -29,30 +32,48 @@ class TableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print(DataApp.dadosDoUsuario)
     }
 
+    @IBAction func alterarExtrato(_ sender: Any) {
+        if segmentedControl.selectedSegmentIndex == 0 {
+            let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
+            historico = conta["historic"] as! [[String:Any]]
+        } else if segmentedControl.selectedSegmentIndex == 1 {
+            let conta = DataApp.dadosDoUsuario["savings"] as! [String:Any]
+            historico = conta["historic"] as! [[String:Any]]
+        }
+        tableView.reloadData()
+        print(historico)
+    }
+    
     // MARK: - Table view data source
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return (dadosTableView["dados"] as! [Any?]).count
+        if segmentedControl.selectedSegmentIndex == 0 {
+            if let conta = DataApp.dadosDoUsuario["account"] as? [String:Any],
+                let historico = conta["historic"] as? [[String:Any]] {
+                return historico.count
+            }
+        } else if segmentedControl.selectedSegmentIndex == 1 {
+            if let conta = DataApp.dadosDoUsuario["savings"] as? [String:Any],
+                let historico = conta["historic"] as? [[String:Any]] {
+                return historico.count
+            }
+        }
+        return 0
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ExtratoTableViewCell
-        let dados = dadosTableView["dados"] as! [[String:Any]]
-        cell.descricaoLabel.text = (dados[indexPath.row]["description"] as! String)
-        cell.dataLabel.text = (dados[indexPath.row]["date"] as! String)
-        cell.valorLabel.text = String(dados[indexPath.row]["value"] as! Double)
+        cell.descricaoLabel.text = (historico[indexPath.row]["description"] as! String)
+        cell.dataLabel.text = (historico[indexPath.row]["date"] as! String)
+        cell.valorLabel.text = String(historico[indexPath.row]["value"] as! Double)
         return cell
     }
 

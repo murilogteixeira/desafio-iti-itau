@@ -15,11 +15,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var labelSaldoPoupanca: UILabel!
     
     var dadosParaTableView = [String:Any]()
-
-    var lista = [[String:Any]]()
-    
-    var alfabeto = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-    var contatos = ["A":[""], "B":[""], "C":[""], "D":[""], "E":[""], "F":[""], "G":[""], "H":[""], "I":[""], "J":[""], "K":[""], "L":[""], "M":[""], "N":[""], "O":[""], "P":[""], "Q":[""], "R":[""], "S":[""], "T":[""], "U":[""], "V":[""], "W":[""], "X":[""], "Y":[""], "Z":[""]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +31,11 @@ class ViewController: UIViewController {
                 if let username = DataApp.dadosDoUsuario["name"] {
                     let user = DataApp.dadosDoUsuario
                     self.labelNome.text = "Olá \(username)!\nAqui está o resumo da sua conta:"
-                    if let saldoConta = user["accountBalance"] as? Double,
-                        let saldoPoupanca = user["savingsBalance"] as? Double {
+                    if let conta = user["account"] as? [String:Any],
+                        let saldoConta = conta["balance"] as? Double,
+                        let poupanca = user["savings"] as? [String:Any],
+                        let saldoPoupanca = poupanca["balance"] as? Double {
+                        
                         self.labelSaldoConta.text = String("R$\(saldoConta)")
                         self.labelSaldoPoupanca.text = String("R$\(saldoPoupanca)")
                     }
@@ -60,15 +58,12 @@ class ViewController: UIViewController {
                 "comando"   : "extrato",
                 "dados"     : extrato
             ]
-            performSegue(withIdentifier: "vaiTableView", sender: self)
         }
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? TableViewController {
-            vc.dadosTableView = dadosParaTableView
-        }
+        
     }
     
 }
