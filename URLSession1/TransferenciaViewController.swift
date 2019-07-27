@@ -37,7 +37,11 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
             View.loadingView(show: false, view: self.view)
             if let dados = contatos as? [String:[String]],
                 let nomes = dados["nomes"] {
-                self.contatos = nomes
+                for nome in nomes {
+                    if nome != DataApp.dadosDoUsuario["name"] as! String {
+                        self.contatos.append(nome)
+                    }
+                }
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
