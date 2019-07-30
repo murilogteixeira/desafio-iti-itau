@@ -10,11 +10,9 @@ import UIKit
 
 class TransferenciaViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var contatos = [String]()
-    var selectedCell: UITableViewCell? = UITableViewCell()
+    var selectedCell: UITableViewCell?
+    let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
     
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBOutlet weak var saldoLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -22,65 +20,120 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
+        
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
-        saldoLabel.text = "R$ \(conta["balance"] as! Double)"
+//        let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
+//        saldoLabel.text = "R$ \(conta["balance"] as! Double)"
+        
+        atualizarContatos()
+        
+        let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+        
+        navigationItem.rightBarButtonItem = add
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @objc func addTapped() {
+        View.showInputAlert(title: "Adicionar Contato", message: "Insira o nome do contato para adicionar:", placeholder: "Digite o nome do contato", viewController: self) { nomeContato in
+            
+            API.search(option: "usuario/search", json: ["name" : nomeContato], completion: { user in
+                if user == nil {
+                    API.post(option: "usuario/new", json: ["name" : nomeContato], completion: { success in
+                        if success {
+                            View.showOkAlert(title: "Usuário cadastrado!", message: nil, viewController: self, completion: {})
+                            self.atualizarContatos()
+                        }
+                    })
+                } else {
+                    View.showOkAlert(title: "Usuário já cadastrado", message: nil, viewController: self, completion: {})
+                }
+            })
+        }
+    }
+    
+    func atualizarContatos(){
         View.loadingView(show: true, showLoading: true, view: self.view)
         API.get(option: "usuario/list") { contatos in
             View.loadingView(show: false, view: self.view)
-            if let dados = contatos as? [String:[String]],
-                let nomes = dados["nomes"] {
-                for nome in nomes {
-                    if nome != DataApp.dadosDoUsuario["name"] as! String {
-                        self.contatos.append(nome)
+            if let dados = contatos as? [String:[String]], var nomes = dados["nomes"] {
+                let username = DataApp.dadosDoUsuario["name"] as! String
+                for i in 0..<nomes.count {
+                    if nomes[i] == username {
+                        nomes.remove(at: i)
+                        break
                     }
                 }
+                nomes.sort()
+                DataApp.contatos = nomes
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
             }
         }
     }
-
-    @IBAction func alterarConta(_ sender: Any) {
-        if segmentedControl.selectedSegmentIndex == 0 {
-            let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
-            saldoLabel.text = "R$ \(conta["balance"] as! Double)"
-        } else if segmentedControl.selectedSegmentIndex == 1 {
-            let poupanca = DataApp.dadosDoUsuario["savings"] as! [String:Any]
-            saldoLabel.text = "R$ \(poupanca["balance"] as! Double)"
+    
+    @IBAction func continuar(_ sender: Any) {
+        if selectedCell == nil {
+            View.showOkAlert(title: "Selecione um contato.", message: nil, viewController: self, completion: {})
+        } else {
+            self.performSegue(withIdentifier: "vaiConfirmarTransferencia", sender: self)
         }
     }
     
     // MARK: - Table view data source
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 75
+        } else if indexPath.section == 1 {
+            return 45
+        }
+        return 0
+    }
 
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "De:"
+        } else if section == 1 {
+            return "Para:"
+        }
+        return nil
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return contatos.count
+        if section == 0 {
+            return 1
+        } else if section == 1 {
+            return DataApp.contatos.count
+        }
+        return 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = contatos[indexPath.row]
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellConta", for: indexPath)
+            return cell
+        } else if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellContatos", for: indexPath)
+            cell.textLabel?.text = DataApp.contatos[indexPath.row]
+            return cell
+        }
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCell?.accessoryType = .none
-        selectedCell = tableView.cellForRow(at: indexPath)
-        selectedCell?.accessoryType = .checkmark
+        if indexPath.section == 1 {
+            selectedCell?.accessoryType = .none
+            selectedCell = tableView.cellForRow(at: indexPath)
+            selectedCell?.accessoryType = .checkmark
+        }
     }
 
     /*

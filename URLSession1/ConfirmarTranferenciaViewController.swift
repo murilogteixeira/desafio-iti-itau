@@ -1,20 +1,15 @@
 //
-//  ContatosTableViewController.swift
+//  ConfirmarTranferenciaTableViewController.swift
 //  URLSession1
 //
-//  Created by Murilo Teixeira on 26/07/19.
+//  Created by Murilo Teixeira on 29/07/19.
 //  Copyright © 2019 Murilo Teixeira. All rights reserved.
 //
 
 import UIKit
 
-class ExtratoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
-    var historico = [[String:Any]]()
-    
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBOutlet weak var tableView: UITableView!
-    
+class ConfirmarTranferenciaViewController: UIViewController, UITabBarDelegate, UITableViewDataSource {
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,57 +18,25 @@ class ExtratoViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        alterarExtrato(self)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-//        print(DataApp.dadosDoUsuario)
     }
 
-    @IBAction func alterarExtrato(_ sender: Any) {
-        if segmentedControl.selectedSegmentIndex == 0 {
-            let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
-            historico = conta["historic"] as! [[String:Any]]
-        } else if segmentedControl.selectedSegmentIndex == 1 {
-            let conta = DataApp.dadosDoUsuario["savings"] as! [String:Any]
-            historico = conta["historic"] as! [[String:Any]]
-        }
-        tableView.reloadData()
-//        print(historico)
-    }
-    
     // MARK: - Table view data source
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 0
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if segmentedControl.selectedSegmentIndex == 0 {
-            if let conta = DataApp.dadosDoUsuario["account"] as? [String:Any],
-                let historico = conta["historic"] as? [[String:Any]] {
-                return historico.count
-            }
-        } else if segmentedControl.selectedSegmentIndex == 1 {
-            if let conta = DataApp.dadosDoUsuario["savings"] as? [String:Any],
-                let historico = conta["historic"] as? [[String:Any]] {
-                return historico.count
-            }
-        }
         return 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ExtratoTableViewCell
-        cell.descricaoLabel.text = (historico[indexPath.row]["description"] as! String)
-        cell.dataLabel.text = (historico[indexPath.row]["date"] as! String)
-        cell.valorLabel.text = String(historico[indexPath.row]["value"] as! Double)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
+        // Configure the cell...
+
         return cell
     }
 

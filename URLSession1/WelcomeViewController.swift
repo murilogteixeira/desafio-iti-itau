@@ -18,7 +18,7 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func acessarConta(_ sender: Any) {
-        View.showInputAlert(title: "Insira o seu nome conforme cadastrado em sua conta:", message: nil, placeholder: "Digite o seu nome", viewController: self, completion: { nome in
+        View.showInputAlert(title: "Login", message: "Insira o seu nome cadastrado na conta:", placeholder: "Digite o seu nome", viewController: self, completion: { nome in
             // Mostra a tela de loading
             View.loadingView(show: true, showLoading: true, view: self.view)
             // Verifica se existe um usuario com o nome inserido
@@ -33,7 +33,7 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
                     })
                 } else {
                     View.loadingView(show: false, view: self.view)
-                    View.showBoolAlert(title: "Usuário \"\(nome)\" não cadastrado! Deseja cadastrar?", message: nil, viewController: self, completion: { success in
+                    View.showBoolAlert(title: "Erro", message: "Usuário \"\(nome)\" não cadastrado! Deseja cadastrar?", viewController: self, completion: { success in
                         // Cadastrar um novo usuario caso nao exista
                         if success {
                             View.loadingView(show: true, showLoading: true, view: self.view)
@@ -53,7 +53,7 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func criarConta(_ sender: Any) {
-        View.showInputAlert(title: "Insira o seu nome para cadastrar:", message: nil, placeholder: "Digite o seu nome", viewController: self, completion: { nome in
+        View.showInputAlert(title: "Criar Conta", message: "Insira o seu nome para cadastrar:", placeholder: "Digite o seu nome", viewController: self, completion: { nome in
             // Mostra a tela de loading
             View.loadingView(show: true, showLoading: true, view: self.view)
             // Verifica se existe um usuario com o nome inserido
@@ -63,7 +63,7 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
                 if let user = response {
                     // Desabilita a tela de loading
                     View.loadingView(show: false, view: self.view)
-                    View.showBoolAlert(title: "Usuário \"\(nome)\" já cadastrado! Deseja acessar a conta?", message: nil, viewController: self, completion: { success in
+                    View.showBoolAlert(title: "Erro", message: "Usuário \"\(nome)\" já cadastrado! Deseja acessar a conta?", viewController: self, completion: { success in
                         // Acessa a conta do usuario existente
                         if success {
                             DataApp.atualizarDadosDoUsuario(nome: user["name"] as! String, completion: { atualizado in
@@ -89,8 +89,8 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
     
     // Procura um nome cadastrado
     func search(nome: String, completion: @escaping (Bool, [String:Any]?) -> Void) {
-        API.get(option: "usuario/search?name=\(nome)") { response in
-            if let user = response as? [[String : Any]], user.count != 0, user[0]["name"] as! String == nome {
+        API.get(option: "usuario/search?name=\(nome)") { jsonResponse in
+            if let user = jsonResponse as? [[String : Any]], user.count != 0, user[0]["name"] as! String == nome {
                 completion(true, user[0])
             } else {
                 completion(false, nil)

@@ -13,7 +13,7 @@ class View {
         DispatchQueue.main.async {
             if show {
                 let loadingView = UIView(frame: CGRect(origin: .zero, size: view.frame.size))
-                loadingView.backgroundColor = UIColor(white: 0.0, alpha: 0.3)
+                loadingView.backgroundColor = UIColor(white: 1.0, alpha: 0.0)
                 loadingView.tag = 99098
                 view.addSubview(loadingView)
                 
@@ -73,10 +73,12 @@ class View {
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             alert.addTextField { (textField) in
                 textField.placeholder = placeholder
+                textField.returnKeyType = .done
             }
             
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                guard let text = alert.textFields?.first?.text else {
+                guard let text = alert.textFields?.first?.text, text != "" else {
+                    showOkAlert(title: "Campo de texto não pode ser vazio.", message: nil, viewController: viewController, completion: {})
                     return
                 }
                 completion(text.uppercased())

@@ -10,6 +10,7 @@ import Foundation
 
 class DataApp {
     static var dadosDoUsuario = [String:Any]()
+    static var contatos = [String]()
     
     static func atualizarDadosDoUsuario(nome:String, completion: @escaping (Bool) -> Void) {
         let json = ["name":nome]
