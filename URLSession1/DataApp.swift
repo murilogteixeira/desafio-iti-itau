@@ -9,19 +9,43 @@
 import Foundation
 
 class DataApp {
-    static var dadosDoUsuario = [String:Any]()
-    static var contatos = [String]()
+    static var contatos: [String] = []
+    static var usuario: Usuario!
     
-    static func atualizarDadosDoUsuario(nome:String, completion: @escaping (Bool) -> Void) {
+    static var tipoContaTransferencia = 0
+    
+    static func atualizarDadosDoUsuario(nome:String, completion: @escaping (Bool?) -> Void) {
         let json = ["name":nome]
-        API.search(option: "usuario/search", json: json) { response in
-            if let data = response {
-                DataApp.dadosDoUsuario = data
-                print("Dados atualizados. Nome: \(DataApp.dadosDoUsuario["name"] as! String)")
+        API.searchUser(json: json) { response in
+            guard response != nil  else {
+                completion(nil)
+                return
+            }
+            if let usuario = response {
+                self.usuario = usuario
+                print("Dados atualizados. Nome: \(usuario.name)")
                 completion(true)
             } else {
                 completion(false)
             }
         }
     }
+}
+
+struct Usuario: Codable {
+    let name: String
+    let transferLimitUsed: Double
+    let account: Conta
+    let savings: Conta
+}
+
+struct Conta: Codable {
+    var balance: Double
+    var historic: [Transacao]
+}
+
+struct Transacao: Codable {
+    let description: String
+    let value: Double
+    let date: String
 }

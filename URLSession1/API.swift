@@ -12,18 +12,29 @@ class API {
     static let session = URLSession.shared
     static let url = "https://api-murilo.mybluemix.net/"
     
-    static func get(option: String, completion: @escaping (Any?) -> Void) {
-        let prepareUrl = "\(url)\(option)"
+    static func getContacts(completion: @escaping ([String]?) -> Void) {
+        let query = "usuario/list"
+        let prepareUrl = "\(url)\(query)"
         let urlApi = URL(string: prepareUrl)!
         
         let task = session.dataTask(with: urlApi) { data, response, error in
-            completion(self.tratarResposta(data: data, response: response, error: error))
+            if let data = self.tratarResposta(data: data, response: response, error: error) {
+                do {
+                    let decoder = JSONDecoder()
+                    let contatos = try decoder.decode([String].self, from: data)
+                    completion(contatos)
+                } catch {
+                    print("Erro ao buscar contatos: \(error.localizedDescription)")
+                    completion(nil)
+                }
+            }
         }
         task.resume()
     }
     
-    static func search(option: String, json: [String:String?], completion: @escaping ([String:Any]?) -> Void) {
-        let prepareUrl = "\(url)\(option)"
+    static func searchUser(json: [String:String?], completion: @escaping (Usuario?) -> Void) {
+        let query = "usuario/search"
+        let prepareUrl = "\(url)\(query)"
         let urlApi = URL(string: prepareUrl)!
         var request = URLRequest(url: urlApi)
         request.httpMethod = "POST"
@@ -33,8 +44,16 @@ class API {
         
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
         let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
-            if let resposta = self.tratarResposta(data: data, response: response, error: error) as? [[String:Any]], resposta.count > 0 {
-                completion(resposta[0])
+            if let data = self.tratarResposta(data: data, response: response, error: error) {
+                do {
+                    let decoder = JSONDecoder()
+//                    print(try JSONSerialization.jsonObject(with: data, options: []))
+                    let usuario = try decoder.decode(Usuario.self, from: data)
+                    completion(usuario)
+                } catch {
+                    print("Erro ao buscar usuario: \(error.localizedDescription)")
+                    completion(nil)
+                }
             } else {
                 completion(nil)
             }
@@ -42,8 +61,9 @@ class API {
         task.resume()
     }
     
-    static func post(option: String, json: [String:String?], completion: @escaping (Bool) -> Void) {
-        let prepareUrl = "\(url)\(option)"
+    static func novoUsuario(json: [String:String?], completion: @escaping (Bool?) -> Void) {
+        let query = "usuario/new"
+        let prepareUrl = "\(url)\(query)"
         let urlApi = URL(string: prepareUrl)!
         var request = URLRequest(url: urlApi)
         request.httpMethod = "POST"
@@ -53,12 +73,28 @@ class API {
         
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
         let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
-            if let resposta = self.tratarResposta(data: data, response: response, error: error) as? [String:Any] {
-                if resposta["name"] as? String == json["name"] {
-                    completion(true)
+            if let data = self.tratarResposta(data: data, response: response, error: error) {
+                if let data = self.tratarResposta(data: data, response: response, error: error) {
+                    do {
+                        let decoder = JSONDecoder()
+                        let usuario = try decoder.decode(Usuario.self, from: data)
+                        if usuario.name == json["name"] {
+                            completion(true)
+                        } else {
+                            completion(false)
+                        }
+                    } catch {
+                        print("Erro ao buscar usuario: \(error.localizedDescription)")
+                        completion(nil)
+                    }
                 } else {
                     completion(false)
                 }
+//                if resposta["name"] as? String == json["name"] {
+//                    completion(true)
+//                } else {
+//                    completion(false)
+//                }
             }
         }
         task.resume()
@@ -81,7 +117,32 @@ class API {
         task.resume()
     }
     
-    static func tratarResposta(data: Data?, response: URLResponse?, error: Error?) -> Any? {
+    static func transfer(option: String, json: [String:Any?], completion: @escaping (Bool?) -> Void) {
+        let prepareUrl = "\(url)\(option)"
+        let urlApi = URL(string: prepareUrl)!
+        var request = URLRequest(url: urlApi)
+        request.httpMethod = "POST"
+        
+        request.setValue("appliucation/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
+        
+        let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+        let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
+            if let data = self.tratarResposta(data: data, response: response, error: error) {
+//                if resposta["name"] as? String == json["name"] as? String {
+//                    completion(true)
+//                } else {
+//                    completion(false)
+//                }
+                completion(true)
+            } else {
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+    
+    static func tratarResposta(data: Data?, response: URLResponse?, error: Error?) -> Data? {
         // verifica se houve erro
         guard error == nil else {
             print("Ocorreu um erro. \(String(describing: error))")
@@ -101,14 +162,14 @@ class API {
         }
         
         // converte os dados da resposta do tipo binário para json
-        var json: Any!
-        do {
-            json = try JSONSerialization.jsonObject(with: data!, options: [])
-            // salva a lista para visualizar
-            return json
-        } catch {
-            print("JSON error: \(error.localizedDescription)")
-        }
-        return nil
+//        var json: Any!
+//        do {
+//            json = try JSONSerialization.jsonObject(with: data!, options: [])
+//            // salva a lista para visualizar
+////            return json
+//        } catch {
+//            print("JSON error: \(error.localizedDescription)")
+//        }
+        return data
     }
 }

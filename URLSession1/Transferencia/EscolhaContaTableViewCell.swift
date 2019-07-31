@@ -16,8 +16,8 @@ class EscolhaContaTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
-        saldoLabel.text = "Saldo R$ \(conta["balance"] as! Double)"
+//        let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
+        saldoLabel.text = "Saldo "+"\(DataApp.usuario.account.balance)".doubleValue.currency
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -28,11 +28,10 @@ class EscolhaContaTableViewCell: UITableViewCell {
 
     @IBAction func alterarConta(_ sender: Any) {
         if segmentedControl.selectedSegmentIndex == 0 {
-            let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
-            saldoLabel.text = "Saldo R$ \(conta["balance"] as! Double)"
+            saldoLabel.text = "Saldo "+"\(DataApp.usuario.account.balance)".doubleValue.currency
         } else if segmentedControl.selectedSegmentIndex == 1 {
-            let poupanca = DataApp.dadosDoUsuario["savings"] as! [String:Any]
-            saldoLabel.text = "Saldo R$ \(poupanca["balance"] as! Double)"
+            saldoLabel.text = "Saldo "+"\(DataApp.usuario.savings.balance)".doubleValue.currency
         }
+        DataApp.tipoContaTransferencia = segmentedControl.selectedSegmentIndex
     }
 }

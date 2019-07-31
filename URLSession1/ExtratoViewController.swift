@@ -10,7 +10,7 @@ import UIKit
 
 class ExtratoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var historico = [[String:Any]]()
+    var historico = [Transacao]()
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
@@ -37,11 +37,11 @@ class ExtratoViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     @IBAction func alterarExtrato(_ sender: Any) {
         if segmentedControl.selectedSegmentIndex == 0 {
-            let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
-            historico = conta["historic"] as! [[String:Any]]
+//            let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
+            historico = DataApp.usuario.account.historic
         } else if segmentedControl.selectedSegmentIndex == 1 {
-            let conta = DataApp.dadosDoUsuario["savings"] as! [String:Any]
-            historico = conta["historic"] as! [[String:Any]]
+//            let conta = DataApp.dadosDoUsuario["savings"] as! [String:Any]
+            historico = DataApp.usuario.savings.historic
         }
         tableView.reloadData()
 //        print(historico)
@@ -56,24 +56,25 @@ class ExtratoViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if segmentedControl.selectedSegmentIndex == 0 {
-            if let conta = DataApp.dadosDoUsuario["account"] as? [String:Any],
-                let historico = conta["historic"] as? [[String:Any]] {
-                return historico.count
-            }
+//            if let conta = DataApp.dadosDoUsuario["account"] as? [String:Any],
+//                let historico = conta["historic"] as? [[String:Any]] {
+//            }
+            return DataApp.usuario.account.historic.count
         } else if segmentedControl.selectedSegmentIndex == 1 {
-            if let conta = DataApp.dadosDoUsuario["savings"] as? [String:Any],
-                let historico = conta["historic"] as? [[String:Any]] {
-                return historico.count
-            }
+//            if let conta = DataApp.dadosDoUsuario["savings"] as? [String:Any],
+//                let historico = conta["historic"] as? [[String:Any]] {
+//                return historico.count
+//            }
+            return DataApp.usuario.savings.historic.count
         }
         return 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ExtratoTableViewCell
-        cell.descricaoLabel.text = (historico[indexPath.row]["description"] as! String)
-        cell.dataLabel.text = (historico[indexPath.row]["date"] as! String)
-        cell.valorLabel.text = String(historico[indexPath.row]["value"] as! Double)
+        cell.descricaoLabel.text = (historico[indexPath.row].description)
+        cell.dataLabel.text = (historico[indexPath.row].date)
+        cell.valorLabel.text = String(historico[indexPath.row].value).doubleValue.currency
         return cell
     }
 

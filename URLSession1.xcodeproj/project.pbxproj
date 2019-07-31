@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		691112BC22EB78D00031EEE1 /* DataApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691112BB22EB78D00031EEE1 /* DataApp.swift */; };
 		691112BE22EB83EC0031EEE1 /* ExtratoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691112BD22EB83EC0031EEE1 /* ExtratoTableViewCell.swift */; };
+		6958F19822EFE2BE00FFC511 /* TipoContaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6958F19722EFE2BE00FFC511 /* TipoContaTableViewCell.swift */; };
+		6958F19A22EFE2CD00FFC511 /* ContatoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6958F19922EFE2CD00FFC511 /* ContatoTableViewCell.swift */; };
+		6958F19C22EFE2E500FFC511 /* ValorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6958F19B22EFE2E500FFC511 /* ValorTableViewCell.swift */; };
 		69794FC322E77EF2002C79DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69794FC222E77EF2002C79DD /* AppDelegate.swift */; };
 		69794FC522E77EF2002C79DD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69794FC422E77EF2002C79DD /* ViewController.swift */; };
 		69794FC822E77EF2002C79DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69794FC622E77EF2002C79DD /* Main.storyboard */; };
@@ -26,6 +29,9 @@
 /* Begin PBXFileReference section */
 		691112BB22EB78D00031EEE1 /* DataApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataApp.swift; sourceTree = "<group>"; };
 		691112BD22EB83EC0031EEE1 /* ExtratoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtratoTableViewCell.swift; sourceTree = "<group>"; };
+		6958F19722EFE2BE00FFC511 /* TipoContaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipoContaTableViewCell.swift; sourceTree = "<group>"; };
+		6958F19922EFE2CD00FFC511 /* ContatoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContatoTableViewCell.swift; sourceTree = "<group>"; };
+		6958F19B22EFE2E500FFC511 /* ValorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValorTableViewCell.swift; sourceTree = "<group>"; };
 		69794FBF22E77EF2002C79DD /* URLSession1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = URLSession1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69794FC222E77EF2002C79DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69794FC422E77EF2002C79DD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -53,6 +59,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6958F19422EFE22100FFC511 /* Extrato */ = {
+			isa = PBXGroup;
+			children = (
+				69C74CFB22EAA87B00F42F3F /* ExtratoViewController.swift */,
+				691112BD22EB83EC0031EEE1 /* ExtratoTableViewCell.swift */,
+			);
+			name = Extrato;
+			sourceTree = "<group>";
+		};
+		6958F19522EFE23700FFC511 /* Transferencia */ = {
+			isa = PBXGroup;
+			children = (
+				69B044BE22EBB4E100F2EC0C /* TransferenciaViewController.swift */,
+				69BF6BF722EF997A00544066 /* EscolhaContaTableViewCell.swift */,
+			);
+			path = Transferencia;
+			sourceTree = "<group>";
+		};
+		6958F19622EFE28300FFC511 /* ConfirmarTransferencia */ = {
+			isa = PBXGroup;
+			children = (
+				69BF6BF522EF72F500544066 /* ConfirmarTranferenciaViewController.swift */,
+				6958F19722EFE2BE00FFC511 /* TipoContaTableViewCell.swift */,
+				6958F19922EFE2CD00FFC511 /* ContatoTableViewCell.swift */,
+				6958F19B22EFE2E500FFC511 /* ValorTableViewCell.swift */,
+			);
+			name = ConfirmarTransferencia;
+			path = Transferencia;
+			sourceTree = "<group>";
+		};
 		69794FB622E77EF1002C79DD = {
 			isa = PBXGroup;
 			children = (
@@ -78,11 +114,9 @@
 				691112BB22EB78D00031EEE1 /* DataApp.swift */,
 				6995D7F022E8CEFA00B19DF4 /* WelcomeViewController.swift */,
 				69794FC422E77EF2002C79DD /* ViewController.swift */,
-				69C74CFB22EAA87B00F42F3F /* ExtratoViewController.swift */,
-				691112BD22EB83EC0031EEE1 /* ExtratoTableViewCell.swift */,
-				69BF6BF722EF997A00544066 /* EscolhaContaTableViewCell.swift */,
-				69B044BE22EBB4E100F2EC0C /* TransferenciaViewController.swift */,
-				69BF6BF522EF72F500544066 /* ConfirmarTranferenciaViewController.swift */,
+				6958F19422EFE22100FFC511 /* Extrato */,
+				6958F19522EFE23700FFC511 /* Transferencia */,
+				6958F19622EFE28300FFC511 /* ConfirmarTransferencia */,
 				69794FC622E77EF2002C79DD /* Main.storyboard */,
 				69794FC922E77EF4002C79DD /* Assets.xcassets */,
 				69794FCB22E77EF4002C79DD /* LaunchScreen.storyboard */,
@@ -166,13 +200,16 @@
 				69794FC522E77EF2002C79DD /* ViewController.swift in Sources */,
 				69C74CFE22EAB3FA00F42F3F /* View.swift in Sources */,
 				6995D7F522E8E9F600B19DF4 /* API.swift in Sources */,
+				6958F19C22EFE2E500FFC511 /* ValorTableViewCell.swift in Sources */,
 				69C74CFC22EAA87B00F42F3F /* ExtratoViewController.swift in Sources */,
 				69B044BF22EBB4E100F2EC0C /* TransferenciaViewController.swift in Sources */,
+				6958F19A22EFE2CD00FFC511 /* ContatoTableViewCell.swift in Sources */,
 				69794FC322E77EF2002C79DD /* AppDelegate.swift in Sources */,
 				69BF6BF622EF72F500544066 /* ConfirmarTranferenciaViewController.swift in Sources */,
 				691112BC22EB78D00031EEE1 /* DataApp.swift in Sources */,
 				691112BE22EB83EC0031EEE1 /* ExtratoTableViewCell.swift in Sources */,
 				69BF6BF822EF997A00544066 /* EscolhaContaTableViewCell.swift in Sources */,
+				6958F19822EFE2BE00FFC511 /* TipoContaTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

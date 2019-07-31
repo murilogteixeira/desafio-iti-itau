@@ -10,8 +10,8 @@ import UIKit
 
 class TransferenciaViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var selectedCell: UITableViewCell?
-    let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
+    var selectedIndexPath: IndexPath?
+    var selectedContact: String?
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -24,9 +24,6 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-//        let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
-//        saldoLabel.text = "R$ \(conta["balance"] as! Double)"
-        
         atualizarContatos()
         
         let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
@@ -37,12 +34,18 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
     @objc func addTapped() {
         View.showInputAlert(title: "Adicionar Contato", message: "Insira o nome do contato para adicionar:", placeholder: "Digite o nome do contato", viewController: self) { nomeContato in
             
-            API.search(option: "usuario/search", json: ["name" : nomeContato], completion: { user in
+            API.searchUser(json: ["name" : nomeContato], completion: { user in
+                guard user != nil  else {
+                    View.showOkAlert(title: "Erro", message: "Ocorreu um erro na comunicação com o servidor", viewController: self, completion: {})
+                    return
+                }
                 if user == nil {
-                    API.post(option: "usuario/new", json: ["name" : nomeContato], completion: { success in
-                        if success {
+                    API.novoUsuario(json: ["name" : nomeContato], completion: { success in
+                        if success != nil {
                             View.showOkAlert(title: "Usuário cadastrado!", message: nil, viewController: self, completion: {})
                             self.atualizarContatos()
+                        } else {
+                            View.showOkAlert(title: "Erro", message: "Ocorreu um erro na comunicação com o servidor", viewController: self, completion: {})
                         }
                     })
                 } else {
@@ -54,10 +57,14 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
     
     func atualizarContatos(){
         View.loadingView(show: true, showLoading: true, view: self.view)
-        API.get(option: "usuario/list") { contatos in
+        API.getContacts() { contatos in
+            guard contatos != nil  else {
+                View.showOkAlert(title: "Erro", message: "Ocorreu um erro na comunicação com o servidor", viewController: self, completion: {})
+                return
+            }
             View.loadingView(show: false, view: self.view)
-            if let dados = contatos as? [String:[String]], var nomes = dados["nomes"] {
-                let username = DataApp.dadosDoUsuario["name"] as! String
+            if var nomes = contatos {
+                let username = DataApp.usuario.name
                 for i in 0..<nomes.count {
                     if nomes[i] == username {
                         nomes.remove(at: i)
@@ -69,12 +76,14 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
+            } else {
+                View.showOkAlert(title: "Erro", message: "Ocorreu um erro na comunicação com o servidor", viewController: self, completion: {})
             }
         }
     }
     
     @IBAction func continuar(_ sender: Any) {
-        if selectedCell == nil {
+        if selectedIndexPath == nil {
             View.showOkAlert(title: "Selecione um contato.", message: nil, viewController: self, completion: {})
         } else {
             self.performSegue(withIdentifier: "vaiConfirmarTransferencia", sender: self)
@@ -85,7 +94,7 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 75
+            return 85
         } else if indexPath.section == 1 {
             return 45
         }
@@ -123,6 +132,11 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellContatos", for: indexPath)
             cell.textLabel?.text = DataApp.contatos[indexPath.row]
+            if indexPath.row == selectedIndexPath?.row {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
             return cell
         }
         return UITableViewCell()
@@ -130,9 +144,15 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            selectedCell?.accessoryType = .none
+            var selectedCell: UITableViewCell?
+            if let selectedIndexPath = selectedIndexPath {
+                selectedCell = tableView.cellForRow(at: selectedIndexPath)
+                selectedCell?.accessoryType = .none
+            }
             selectedCell = tableView.cellForRow(at: indexPath)
             selectedCell?.accessoryType = .checkmark
+            selectedIndexPath = indexPath
+            selectedContact = selectedCell?.textLabel?.text
         }
     }
 
@@ -171,14 +191,28 @@ class TransferenciaViewController: UIViewController, UITableViewDelegate, UITabl
     }
     */
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        guard segue.destination is ConfirmarTranferenciaViewController else {
+            print("destino nao é confirmar transferencia")
+            return
+        }
+        guard let vc = segue.destination as? ConfirmarTranferenciaViewController else {
+            print("nao foi possivel instanciar ConfirmarTranferenciaViewController")
+            return
+        }
+        guard let contato = selectedContact else {
+            print("contato nao selecionado")
+            return
+        }
+        vc.tipoConta = DataApp.tipoContaTransferencia
+        vc.contato = contato
     }
-    */
+
 
 }
