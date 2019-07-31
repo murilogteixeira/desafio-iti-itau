@@ -39,10 +39,11 @@ class API {
         var request = URLRequest(url: urlApi)
         request.httpMethod = "POST"
         
-        request.setValue("appliucation/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
         
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+        print(jsonData)
         let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
             if let data = self.tratarResposta(data: data, response: response, error: error) {
                 do {
@@ -68,7 +69,7 @@ class API {
         var request = URLRequest(url: urlApi)
         request.httpMethod = "POST"
         
-        request.setValue("appliucation/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
         
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
@@ -106,7 +107,7 @@ class API {
         var request = URLRequest(url: urlApi)
         request.httpMethod = "DELETE"
         
-        request.setValue("appliucation/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
         
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
@@ -123,12 +124,14 @@ class API {
         var request = URLRequest(url: urlApi)
         request.httpMethod = "POST"
         
-        request.setValue("appliucation/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
         
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
         let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
             if let data = self.tratarResposta(data: data, response: response, error: error) {
+//                let json = try! JSONSerialization.jsonObject(with: data, options: [])
+//                print(json)
 //                if resposta["name"] as? String == json["name"] as? String {
 //                    completion(true)
 //                } else {

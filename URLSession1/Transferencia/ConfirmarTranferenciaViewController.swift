@@ -41,12 +41,10 @@ class ConfirmarTranferenciaViewController: UIViewController, UITableViewDelegate
         }
         
         let json: [String : Any] = [
-            "from" : [
-                "type" : tipoContaString,
-                "value" : valorTransferencia,
-                "name" : DataApp.usuario.name
-            ],
-            "to" : contato
+            "from"  : DataApp.usuario.name,
+            "to"    : contato,
+            "type"  : tipoContaString,
+            "value" : valorTransferencia
         ]
         
         View.loadingView(show: true, showLoading: true, view: self.view)
