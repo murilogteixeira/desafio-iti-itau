@@ -118,7 +118,7 @@ class API {
     }
     
     struct Result: Codable {
-        let error: Bool
+        let errorOccurred: Bool
         let msg: String
     }
     
@@ -141,7 +141,7 @@ class API {
                 do {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(Response.self, from: data)
-                    completion(result.result.error, result.result.msg)
+                    completion(result.result.errorOccurred, result.result.msg)
                 } catch {
                     print("Erro ao obter resposta da transferencia: \(error.localizedDescription)")
                 }
