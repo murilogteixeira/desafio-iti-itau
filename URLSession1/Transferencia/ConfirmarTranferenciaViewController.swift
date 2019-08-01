@@ -48,13 +48,16 @@ class ConfirmarTranferenciaViewController: UIViewController, UITableViewDelegate
         ]
         
         View.loadingView(show: true, showLoading: true, view: self.view)
-        API.transfer(option: "conta/transfer", json: json) { success in
+        API.transfer(option: "conta/transfer", json: json) { success, msg in
             View.loadingView(show: false, view: self.view)
-            if success != nil {
-                
-            } else {
-                View.showOkAlert(title: "Erro", message: "Ocorreu um erro na comunicação com o servidor", viewController: self, completion: {})
+            guard success != nil else {
+                View.showOkAlert(title: "Erro", message: msg, viewController: self, completion: {})
+                return
             }
+            View.showOkAlert(title: "Sucesso", message: msg, viewController: self, completion: {
+                self.performSegue(withIdentifier: "vaiMinhaConta", sender: self)
+            })
+            
         }
     }
     

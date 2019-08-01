@@ -43,7 +43,6 @@ class API {
         request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
         
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
-        print(jsonData)
         let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
             if let data = self.tratarResposta(data: data, response: response, error: error) {
                 do {
@@ -118,7 +117,16 @@ class API {
         task.resume()
     }
     
-    static func transfer(option: String, json: [String:Any?], completion: @escaping (Bool?) -> Void) {
+    struct Result: Codable {
+        let error: Bool
+        let msg: String
+    }
+    
+    struct Response: Codable {
+        let result: Result
+    }
+    
+    static func transfer(option: String, json: [String:Any?], completion: @escaping (Bool?, String?) -> Void) {
         let prepareUrl = "\(url)\(option)"
         let urlApi = URL(string: prepareUrl)!
         var request = URLRequest(url: urlApi)
@@ -130,16 +138,15 @@ class API {
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
         let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
             if let data = self.tratarResposta(data: data, response: response, error: error) {
-//                let json = try! JSONSerialization.jsonObject(with: data, options: [])
-//                print(json)
-//                if resposta["name"] as? String == json["name"] as? String {
-//                    completion(true)
-//                } else {
-//                    completion(false)
-//                }
-                completion(true)
+                do {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(Response.self, from: data)
+                    completion(result.result.error, result.result.msg)
+                } catch {
+                    print("Erro ao obter resposta da transferencia: \(error.localizedDescription)")
+                }
             } else {
-                completion(nil)
+                completion(nil, nil)
             }
         }
         task.resume()

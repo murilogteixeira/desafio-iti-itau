@@ -18,6 +18,7 @@ class EscolhaContaTableViewCell: UITableViewCell {
         // Initialization code
 //        let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
         saldoLabel.text = "Saldo "+"\(DataApp.usuario.account.balance)".doubleValue.currency
+        DataApp.tipoContaTransferencia = segmentedControl.selectedSegmentIndex
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

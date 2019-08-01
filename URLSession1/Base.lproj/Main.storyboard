@@ -371,6 +371,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="zlr-ju-o3j"/>
                     </view>
+                    <connections>
+                        <segue destination="No9-kg-3tY" kind="presentation" identifier="vaiMinhaConta" id="zKB-EC-pZJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mwm-OZ-JIZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -474,4 +477,7 @@
             <point key="canvasLocation" x="1280" y="98"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="zKB-EC-pZJ"/>
+    </inferredMetricsTieBreakers>
 </document>
