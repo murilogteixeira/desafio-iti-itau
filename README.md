@@ -77,4 +77,6 @@ Todos os erros e confirmações sao exibidos em forma de alerta para deixar o us
 
 ## Telas
 
+![Tela 1](imgs/tela1.png "Imagem da tela 1")
+![](https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png =250x250)
 
