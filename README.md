@@ -3,7 +3,7 @@
 ## Detalhes da solução 
 
 Todo o aplicativo foi desenvolvido em Swift e implementado somente com frameworks nativas conforme solicitado.
-A API foi construída em Node-Red com integração ao banco de dados NoSQL Cloudant, utilizando documentos em JSON para armazenar as informações. Para acessar o link da API [clique aqui](https://api-murilo.mybluemix.net/red/) e visualize toda a solução implementada.
+A API foi construída em Node-Red com integração ao banco de dados NoSQL Cloudant, utilizando documentos em JSON para armazenar as informações. Para acessar o link da API [clique aqui](https://api-murilo.mybluemix.net/red/){:target="_blank"} e visualize toda a solução implementada.
 
 ## Rotas criadas
 
