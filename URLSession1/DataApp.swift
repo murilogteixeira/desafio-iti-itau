@@ -11,7 +11,6 @@ import Foundation
 class DataApp {
     static var contatos: [String] = []
     static var usuario: Usuario!
-    
     static var tipoContaTransferencia = 0
     
     static func atualizarDadosDoUsuario(nome:String, completion: @escaping (Bool?) -> Void) {

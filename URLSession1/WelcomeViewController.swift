@@ -11,8 +11,6 @@ import UIKit
 
 class WelcomeViewController: UIViewController, UITextFieldDelegate {
     
-    var contatos = [[String:Any]]()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -24,11 +22,6 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
             // Verifica se existe um usuario com o nome inserido
             let json = ["name":nome]
             API.searchUser(json: json, completion: { response in
-//                View.loadingView(show: false, view: self.view)
-//                guard response != nil  else {
-//                    View.showOkAlert(title: "Erro", message: "Ocorreu um erro na comunicação com o servidor", viewController: self, completion: {})
-//                    return
-//                }
                 // Verifica se o usuario foi encontrado
                 if let user = response {
                     DataApp.atualizarDadosDoUsuario(nome: user.name, completion: { success in
@@ -68,10 +61,6 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
             // Verifica se existe um usuario com o nome inserido
             let json = ["name":nome]
             API.searchUser(json: json, completion: { response in
-                guard response != nil  else {
-                    View.showOkAlert(title: "Erro", message: "Ocorreu um erro na comunicação com o servidor", viewController: self, completion: {})
-                    return
-                }
                 // Verifica se o nome já existe
                 if let user = response {
                     // Desabilita a tela de loading
@@ -117,17 +106,6 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
                 completion(false, nil)
             }
         }
-//        API.get(option: "usuario/search?name=\(nome)") { jsonResponse in
-//            guard jsonResponse != nil  else {
-//                View.showOkAlert(title: "Erro", message: "Ocorreu um erro na comunicação com o servidor", viewController: self, completion: {})
-//                return
-//            }
-//            if let user = jsonResponse as? [[String : Any]], user.count != 0, user[0]["name"] as! String == nome {
-//                completion(true, user[0])
-//            } else {
-//                completion(false, nil)
-//            }
-//        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -146,10 +124,5 @@ class WelcomeViewController: UIViewController, UITextFieldDelegate {
             self.performSegue(withIdentifier: "vaiParaTransferencia", sender: self)
             
         }
-    }
-    
-    
-    func delay(_ seconds: Double, completion: @escaping () -> Void){
-        DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: completion)
     }
 }

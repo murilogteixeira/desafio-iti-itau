@@ -32,18 +32,6 @@ class ViewController: UIViewController {
                     
                 self.labelSaldoConta.text = String("\(DataApp.usuario.account.balance)".doubleValue.currency)
                 self.labelSaldoPoupanca.text = String("\(DataApp.usuario.savings.balance)".doubleValue.currency)
-//                if let username = DataApp.usuario.name {
-//                    let user = DataApp.dadosDoUsuario
-//                    self.labelNome.text = "Olá \(username)!\nAqui está o resumo da sua conta:"
-//                    if let conta = user["account"] as? [String:Any],
-//                        let saldoConta = conta["balance"] as? Double,
-//                        let poupanca = user["savings"] as? [String:Any],
-//                        let saldoPoupanca = poupanca["balance"] as? Double {
-//
-//                        self.labelSaldoConta.text = String("\(saldoConta)".doubleValue.currency)
-//                        self.labelSaldoPoupanca.text = String("\(saldoPoupanca)".doubleValue.currency)
-//                    }
-//                }
             }
         }
     }
@@ -61,12 +49,6 @@ class ViewController: UIViewController {
             "comando"   : "extrato",
             "dados"     : DataApp.usuario.account.historic
         ]
-//        if let extrato = DataApp.dadosDoUsuario["accountHistoric"] as? [[String:Any]] {
-//            dadosParaTableView = [
-//                "comando"   : "extrato",
-//                "dados"     : extrato
-//            ]
-//        }
     }
     
     

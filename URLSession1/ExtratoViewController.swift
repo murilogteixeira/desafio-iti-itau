@@ -32,15 +32,12 @@ class ExtratoViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        print(DataApp.dadosDoUsuario)
     }
 
     @IBAction func alterarExtrato(_ sender: Any) {
         if segmentedControl.selectedSegmentIndex == 0 {
-//            let conta = DataApp.dadosDoUsuario["account"] as! [String:Any]
             historico = DataApp.usuario.account.historic
         } else if segmentedControl.selectedSegmentIndex == 1 {
-//            let conta = DataApp.dadosDoUsuario["savings"] as! [String:Any]
             historico = DataApp.usuario.savings.historic
         }
         tableView.reloadData()
@@ -56,15 +53,8 @@ class ExtratoViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if segmentedControl.selectedSegmentIndex == 0 {
-//            if let conta = DataApp.dadosDoUsuario["account"] as? [String:Any],
-//                let historico = conta["historic"] as? [[String:Any]] {
-//            }
             return DataApp.usuario.account.historic.count
         } else if segmentedControl.selectedSegmentIndex == 1 {
-//            if let conta = DataApp.dadosDoUsuario["savings"] as? [String:Any],
-//                let historico = conta["historic"] as? [[String:Any]] {
-//                return historico.count
-//            }
             return DataApp.usuario.savings.historic.count
         }
         return 0
