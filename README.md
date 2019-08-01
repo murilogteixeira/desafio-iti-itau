@@ -7,14 +7,14 @@ A API foi construída em Node-Red com integração ao banco de dados NoSQL Cloud
 
 ## Rotas criadas
 
-Foram criadas as seguintes todas para atender as necessidades da aplicação:
+Foram criadas as seguintes rodas para atender as necessidades da aplicação:
 - /usuario/list -> lista o nome de todos os usuários;
 - /usuario/search -> procura um usuário específico através do nome passado como parâmetro;
 - /usuario/new -> cria um novo usuário com o nome passado por parâmetro;
 - /conta/transfer -> realiza a transferência baseado nos valores passados por parâmetro pela aplicação;
 - /usuario/delete -> deleta um usuário (não utilizado na aplicação, somente acessível com todos os dados do usuário necessário para exclusão);
 
-Além dessas rotas utilizadas pela aplicação, foi criado uma rotina que zera o valor de limite de transferência diário todos os dias às 0h.
+Além dessas rotas utilizadas pela aplicação, foi criado uma rotina que zera o valor de limite de transferência diário todos os dias às 0h. 
 
 ## Modelo de JSON adotado
 
@@ -49,7 +49,6 @@ Para a construção da API, utilizei o seguinte modelo de documento JSON:
 }
 ```
 
-### Explicação do JSON
 - id -> valor criado automaticamente pelo banco de dados para identificação do documento;
 - rev -> valor criado automaticamente pelo banco de dados para identificação da revisão do documento;
 - name -> nome do usuario;
@@ -66,3 +65,16 @@ Para a construção da API, utilizei o seguinte modelo de documento JSON:
     - description -> descrição da transação;
     - value -> valor da transação;
     - date -> data da transação;
+
+## Forma de login
+
+O login foi criado de maneira simples, apenas o nome do usuário é necessário e para cada nome só existe uma conta. Alguns nomes já foram inseridos durante os testes.
+Caso o usuário tente realizar o login com um nome inexistente, a aplicação irá perguntar se o usuário deseja criar uma nova conta, assim como ao tentar criar uma conta que já existe, a aplicação vai perguntar se deseja acessar a conta existente.
+
+## Alertas e atividade
+
+Todos os erros e confirmações sao exibidos em forma de alerta para deixar o usuário por dentro de todas as informações, assim como também é exibido um activity indicator sempre que uma requisiçao está sendo realizada ao servidor.
+
+## Telas
+
+
