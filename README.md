@@ -78,5 +78,12 @@ Todos os erros e confirmações sao exibidos em forma de alerta para deixar o us
 ## Telas
 
 ![Tela 1](imgs/tela1.png "Imagem da tela 1")
-![](https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png =250x250)
+![Tela 2](imgs/tela1.png "Imagem da tela 2")
+![Tela 3](imgs/tela1.png "Imagem da tela 3")
+![Tela 4](imgs/tela1.png "Imagem da tela 4")
+![Tela 5](imgs/tela1.png "Imagem da tela 5")
+![Tela 6](imgs/tela1.png "Imagem da tela 6")
+![Tela 7](imgs/tela1.png "Imagem da tela 7")
+![Tela 8](imgs/tela1.png "Imagem da tela 8")
+![Tela 9](imgs/tela1.png "Imagem da tela 9")
 
