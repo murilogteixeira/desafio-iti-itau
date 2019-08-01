@@ -77,4 +77,4 @@ Todos os erros e confirmações sao exibidos em forma de alerta para deixar o us
 
 ## Telas
 
-![Tela 1](imgs/tela1.png "Imagem da tela 1" | height=100)
+![Tela 1](imgs/tela1.png | height=100)
