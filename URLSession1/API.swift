@@ -100,22 +100,22 @@ class API {
         task.resume()
     }
     
-    static func delete(option: String, json: [String:String?]) {
-        let prepareUrl = "\(url)\(option)"
-        let urlApi = URL(string: prepareUrl)!
-        var request = URLRequest(url: urlApi)
-        request.httpMethod = "DELETE"
-        
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
-        
-        let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
-        let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
-            let reposta = self.tratarResposta(data: data, response: response, error: error)
-            print(reposta ?? "")
-        }
-        task.resume()
-    }
+//    static func delete(option: String, json: [String:String?]) {
+//        let prepareUrl = "\(url)\(option)"
+//        let urlApi = URL(string: prepareUrl)!
+//        var request = URLRequest(url: urlApi)
+//        request.httpMethod = "DELETE"
+//        
+//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.setValue("Powered by Swift", forHTTPHeaderField: "X-Powered-By")
+//        
+//        let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+//        let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
+//            let reposta = self.tratarResposta(data: data, response: response, error: error)
+//            print(reposta ?? "")
+//        }
+//        task.resume()
+//    }
     
     struct Result: Codable {
         let errorOccurred: Bool
